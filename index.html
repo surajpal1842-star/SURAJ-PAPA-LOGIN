@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEX CORE V.I.P | ANAND 😈</title>
+    <title>HEX CORE V.I.P | GET KEY</title>
     <style>
         :root {
             --primary: #00f2ff;
             --secondary: #0088ff;
             --accent: #ff00ff;
+            --success: #00ff41;
+            --danger: #ff0055;
             --bg: #050505;
         }
-        * { box-sizing: border-box; cursor: crosshair; }
+        * { box-sizing: border-box; cursor: crosshair; margin: 0; padding: 0; }
         body {
             background-color: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
             position: relative;
         }
         #particles-canvas {
-            position: absolute; top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1; pointer-events: none;
         }
@@ -38,8 +40,8 @@
             50% { transform: translateY(-10px) rotate(0.5deg); }
         }
         .main-card {
-            width: 95%; max-width: 420px;
-            background: rgba(5,10,20,0.9);
+            width: 100%; max-width: 420px;
+            background: rgba(5,10,20,0.92);
             border: 3px solid var(--primary);
             border-radius: 25px;
             padding: 30px;
@@ -47,7 +49,8 @@
             position: relative;
             animation: neonGlow 3s ease-in-out infinite, floatCard 6s ease-in-out infinite;
             backdrop-filter: blur(15px);
-            z-index: 10; overflow: hidden;
+            z-index: 10;
+            overflow: hidden;
         }
         .main-card::before {
             content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
@@ -60,20 +63,20 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
             background-size: 200%;
             padding: 8px 24px; border-radius: 50px;
-            display: inline-block; font-size: 14px; font-weight: 900;
+            display: inline-block; font-size: 13px; font-weight: 900;
             text-transform: uppercase; letter-spacing: 2px;
             margin-bottom: 15px;
             animation: moveGradient 3s linear infinite;
-            color: #000; box-shadow: 0 4px 15px rgba(0,242,255,0.4);
+            color: #000;
         }
         @keyframes moveGradient { 0% { background-position: 0%; } 100% { background-position: 200%; } }
         h2 {
-            font-size: 2.2rem; margin: 5px 0; font-weight: 900;
+            font-size: 2rem; margin: 5px 0; font-weight: 900;
             background: linear-gradient(90deg, #fff, var(--primary));
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
         .dev-tag {
-            font-size: 12px; color: var(--primary);
+            font-size: 11px; color: var(--primary);
             text-transform: uppercase; letter-spacing: 4px;
             margin-bottom: 20px; display: block; font-weight: bold;
             animation: pulse 2s infinite;
@@ -92,43 +95,81 @@
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
         .btn-main {
-            width: 100%; padding: 16px; background: transparent; color: #fff;
-            border: 2px solid var(--primary); border-radius: 15px;
-            font-weight: 900; text-transform: uppercase;
-            transition: all 0.3s ease; cursor: pointer;
-            font-size: 15px; position: relative; overflow: hidden; z-index: 1;
+            width: 100%; padding: 18px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #000; border: none;
+            border-radius: 15px; font-weight: 900;
+            text-transform: uppercase; cursor: pointer;
+            font-size: 15px; letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0,242,255,0.3);
         }
-        .btn-main::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,242,255,0.2), transparent);
-            transition: 0.5s; z-index: -1;
-        }
-        .btn-main:hover::before { left: 100%; }
         .btn-main:hover {
-            background: rgba(0,242,255,0.1);
-            box-shadow: 0 0 25px rgba(0,242,255,0.5);
-            border-color: #fff; transform: translateY(-2px);
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(0,242,255,0.7);
         }
         #procBar { display: none; margin: 20px 0; }
         .loading-text {
             color: #ffff00; font-weight: bold; letter-spacing: 2px;
             animation: blink 1s infinite; text-shadow: 0 0 10px yellow;
+            font-size: 13px;
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .result-box {
+            display: none;
+            background: rgba(0,255,65,0.05);
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px dashed var(--success);
+            margin-top: 20px;
+        }
+        .result-box .label {
+            font-size: 11px; color: #aaa;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .key-text {
+            font-size: 1.2rem; color: var(--success); font-weight: bold;
+            display: block; margin: 12px 0; word-break: break-all;
+            font-family: 'Courier New', monospace;
+            padding: 12px; background: rgba(0,0,0,0.5);
+            border-radius: 10px; border-left: 4px solid var(--success);
+        }
+        .copy-btn {
+            width: 100%; padding: 12px;
+            background: transparent; color: var(--success);
+            border: 2px solid var(--success);
+            border-radius: 10px; font-weight: bold;
+            cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .copy-btn:hover {
+            background: var(--success); color: #000;
+        }
         .social-grid { display: flex; gap: 10px; margin-top: 25px; }
         .social-btn {
             flex: 1; padding: 12px; border-radius: 10px;
-            border: 2px solid; background: transparent; color: #fff;
-            font-weight: bold; font-size: 11px; cursor: pointer;
+            border: 2px solid; background: transparent;
+            color: #fff; font-weight: bold;
+            font-size: 11px; cursor: pointer;
             transition: all 0.3s;
         }
-        .social-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .social-btn:hover { transform: translateY(-3px); }
         .tg-btn { border-color: var(--primary); color: var(--primary); }
         .tg-btn:hover { background: var(--primary); color: #000; }
         .yt-btn { border-color: #ff0000; color: #ff0000; }
         .yt-btn:hover { background: #ff0000; color: #fff; }
-        .footer { margin-top: 20px; font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+        .footer {
+            margin-top: 20px; font-size: 10px;
+            color: rgba(255,255,255,0.3); letter-spacing: 1px;
+        }
+        .admin-link {
+            margin-top: 15px; font-size: 10px;
+            color: #333; text-decoration: none;
+            cursor: pointer; transition: color 0.3s;
+            display: inline-block;
+        }
+        .admin-link:hover { color: var(--primary); }
     </style>
 </head>
 <body>
@@ -146,7 +187,7 @@
         </div>
 
         <div id="action-area">
-            <button class="btn-main" onclick="startFlow()">GENERATE ACCESS KEY</button>
+            <button class="btn-main" onclick="startFlow()">⚡ GENERATE ACCESS KEY</button>
         </div>
 
         <div id="procBar">
@@ -159,21 +200,24 @@
         </div>
 
         <div class="footer">POWERED BY ANAND & SURAJ</div>
+        <a href="admin.html" class="admin-link">⚙ Admin Panel</a>
     </div>
 
-    <script>
+    <script type="module">
+        import { firebaseConfig } from './firebase-config.js';
+
         // ==========================================
-        // CONFIGURATION - YAHAN APNA SHORTENER LINK
+        // CONFIG
         // ==========================================
         const SHORTENER_LINK = "https://earnlinks.in/A8Zqu";
         // ==========================================
 
+        // Particle System
         class ParticleSystem {
             constructor() {
                 this.canvas = document.getElementById('particles-canvas');
                 this.ctx = this.canvas.getContext('2d');
                 this.particles = [];
-                this.particleCount = 60;
                 this.resizeCanvas();
                 window.addEventListener('resize', () => this.resizeCanvas());
                 this.initParticles();
@@ -184,9 +228,8 @@
                 this.canvas.height = window.innerHeight;
             }
             initParticles() {
-                this.particles = [];
                 const colors = ['#00f2ff', '#0088ff', '#ff00ff', '#ffffff'];
-                for (let i = 0; i < this.particleCount; i++) {
+                for (let i = 0; i < 60; i++) {
                     this.particles.push({
                         x: Math.random() * this.canvas.width,
                         y: Math.random() * this.canvas.height,
@@ -204,10 +247,10 @@
                     for (let j = i + 1; j < this.particles.length; j++) {
                         const dx = this.particles[i].x - this.particles[j].x;
                         const dy = this.particles[i].y - this.particles[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < 100) {
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < 100) {
                             this.ctx.beginPath();
-                            this.ctx.strokeStyle = `rgba(0, 242, 255, ${0.1 * (1 - distance/100)})`;
+                            this.ctx.strokeStyle = `rgba(0,242,255,${0.1 * (1 - d/100)})`;
                             this.ctx.lineWidth = 0.5;
                             this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
                             this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
@@ -216,8 +259,7 @@
                     }
                 }
                 this.particles.forEach(p => {
-                    p.x += p.speedX;
-                    p.y += p.speedY;
+                    p.x += p.speedX; p.y += p.speedY;
                     if (p.x < 0 || p.x > this.canvas.width) p.speedX *= -1;
                     if (p.y < 0 || p.y > this.canvas.height) p.speedY *= -1;
                     this.ctx.beginPath();
@@ -238,7 +280,7 @@
             term.scrollTop = term.scrollHeight;
         }
 
-        function startFlow() {
+        window.startFlow = function() {
             document.getElementById('action-area').style.display = 'none';
             document.getElementById('procBar').style.display = 'block';
 
@@ -260,16 +302,17 @@
             const timer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timer').innerText = timeLeft;
-                if(timeLeft <= 5) {
+                if (timeLeft <= 5) {
                     document.querySelector('.loading-text').style.animation = 'blink 0.5s infinite';
                 }
-                if(timeLeft <= 0) {
+                if (timeLeft <= 0) {
                     clearInterval(timer);
                     clearInterval(coding);
+                    // Shortener pe bhejo, wapas aayega connect.html pe
                     window.location.href = SHORTENER_LINK;
                 }
             }, 1000);
-        }
+        };
     </script>
 </body>
 </html>
