@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACCESS GRANTED | HEX CORE</title>
     <style>
-        :root { --primary: #00f2ff; --accent: #ff00ff; }
-        * { box-sizing: border-box; }
+        :root { --primary: #00f2ff; --accent: #ff00ff; --success: #00ff41; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #050505; margin: 0;
+            background: #050505; min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            color: #fff; overflow: hidden;
+            color: #fff; overflow-x: hidden; padding: 20px;
         }
         #particles-canvas {
-            position: absolute; top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; z-index: -1;
         }
         @keyframes neonGlow {
@@ -27,10 +26,11 @@
             50% { transform: translateY(-10px); }
         }
         .main-card {
-            width: 95%; max-width: 420px;
-            background: rgba(5,10,20,0.9);
+            width: 100%; max-width: 420px;
+            background: rgba(5,10,20,0.92);
             border: 3px solid var(--primary);
-            border-radius: 25px; padding: 30px; text-align: center;
+            border-radius: 25px; padding: 30px;
+            text-align: center;
             animation: neonGlow 3s ease-in-out infinite, floatCard 6s ease-in-out infinite;
             backdrop-filter: blur(15px); z-index: 10;
         }
@@ -39,28 +39,12 @@
             background: linear-gradient(90deg, #00ff00, var(--primary));
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .result-box {
-            background: rgba(0,242,255,0.05);
-            padding: 20px; border-radius: 20px;
-            border: 2px dashed var(--accent); margin: 20px 0;
-        }
-        .key-text {
-            font-size: 1.3rem; color: #00ff00; font-weight: bold;
-            display: block; margin: 10px 0; word-break: break-all;
-            font-family: 'Courier New', monospace;
-            padding: 15px; background: rgba(0,0,0,0.5);
-            border-radius: 10px; border-left: 4px solid #00ff00;
-        }
-        .btn-main {
-            width: 100%; padding: 16px; background: transparent;
-            color: #00ff00; border: 2px solid #00ff00;
-            border-radius: 15px; font-weight: 900;
-            text-transform: uppercase; cursor: pointer;
-            font-size: 15px; transition: all 0.3s; margin-top: 10px;
-        }
-        .btn-main:hover {
-            background: #00ff00; color: #000;
-            box-shadow: 0 0 25px rgba(0,255,0,0.5);
+        .badge {
+            background: linear-gradient(90deg, #00f2ff, #ff00ff);
+            color: #000; padding: 8px 24px;
+            border-radius: 50px; display: inline-block;
+            font-size: 13px; font-weight: 900;
+            letter-spacing: 2px; margin-bottom: 15px;
         }
         .terminal {
             background: rgba(0,0,0,0.8);
@@ -70,54 +54,119 @@
             text-align: left; overflow-y: auto; color: #00ff41;
             border-radius: 15px;
         }
+        .result-box {
+            background: rgba(0,255,65,0.05);
+            padding: 20px; border-radius: 20px;
+            border: 2px dashed var(--success);
+            margin: 20px 0;
+        }
+        .result-box .label {
+            font-size: 11px; color: #aaa;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .key-text {
+            font-size: 1.2rem; color: var(--success); font-weight: bold;
+            display: block; margin: 12px 0; word-break: break-all;
+            font-family: 'Courier New', monospace;
+            padding: 15px; background: rgba(0,0,0,0.5);
+            border-radius: 10px; border-left: 4px solid var(--success);
+            min-height: 50px;
+        }
+        .btn-main {
+            width: 100%; padding: 15px;
+            background: transparent; color: var(--success);
+            border: 2px solid var(--success);
+            border-radius: 12px; font-weight: 900;
+            text-transform: uppercase; cursor: pointer;
+            font-size: 14px; letter-spacing: 1px;
+            transition: all 0.3s; margin-top: 10px;
+        }
+        .btn-main:hover {
+            background: var(--success); color: #000;
+            box-shadow: 0 0 25px rgba(0,255,65,0.5);
+        }
+        .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
         .back-btn {
-            color: #888; font-size: 12px; margin-top: 15px;
-            background: none; border: none; cursor: pointer;
+            color: #666; font-size: 12px;
+            margin-top: 15px; background: none;
+            border: none; cursor: pointer;
             text-decoration: underline;
         }
+        .status-box {
+            padding: 15px; border-radius: 12px;
+            font-size: 13px; margin: 15px 0;
+            display: none; font-weight: bold;
+        }
+        .status-box.info {
+            background: rgba(0,242,255,0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            display: block;
+        }
+        .status-box.error {
+            background: rgba(255,0,85,0.1);
+            color: #ff0055;
+            border: 1px solid #ff0055;
+            display: block;
+        }
+        .spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--success);
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <canvas id="particles-canvas"></canvas>
 
     <div class="main-card">
-        <div style="background: linear-gradient(90deg, #00f2ff, #ff00ff); color: #000; padding: 8px 24px; border-radius: 50px; display: inline-block; font-size: 14px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px;">
-            ✅ ACCESS GRANTED
-        </div>
+        <div class="badge">✅ ACCESS GRANTED</div>
         <h2>YOUR ACCESS KEY</h2>
 
         <div class="terminal" id="term">
             [+] Verification complete<br>
-            [+] Decrypting key...
+            [+] Connecting to Firebase...<br>
+            [+] Generating secure key...
         </div>
 
-        <div class="result-box">
-            <span style="font-size: 11px; color: #aaa;">DECRYPTED KEY:</span>
+        <div class="status-box info" id="statusBox">
+            <span class="spinner"></span> SAVING TO DATABASE...
+        </div>
+
+        <div class="result-box" id="resultBox" style="display:none;">
+            <span class="label">YOUR UNIQUE KEY:</span>
             <span class="key-text" id="keyOutput">...</span>
         </div>
 
-        <button class="btn-main" onclick="copyKey(event)">📋 COPY KEY</button>
-        <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+        <button class="btn-main" id="copyBtn" onclick="copyKey(event)" style="display:none;">
+            📋 COPY KEY
+        </button>
+
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            ← Back to Home
+        </button>
     </div>
 
-    <script>
-        // ==========================================
-        // YAHAN APNI KEYS DAALO
-        // ==========================================
-        const keyList = [
-            "vs18ff-168-om0a4", "vs18ff-168-uY0kH", "vs18ff-168-4EX9d",
-            "vs18ff-168-nwKQ0", "vs18ff-168-nyglY", "vs18ff-168-nlqPI",
-            "vs18ff-168-qKGSM", "vs18ff-168-7fScQ", "vs18ff-168-ocqfx",
-            "vs18ff-168-16w8W"
-        ];
-        // ==========================================
+    <script type="module">
+        import { firebaseConfig } from './firebase-config.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Particle System
         class ParticleSystem {
             constructor() {
                 this.canvas = document.getElementById('particles-canvas');
                 this.ctx = this.canvas.getContext('2d');
                 this.particles = [];
-                this.particleCount = 60;
                 this.resizeCanvas();
                 window.addEventListener('resize', () => this.resizeCanvas());
                 this.initParticles();
@@ -129,7 +178,7 @@
             }
             initParticles() {
                 const colors = ['#00f2ff', '#0088ff', '#ff00ff', '#ffffff'];
-                for (let i = 0; i < this.particleCount; i++) {
+                for (let i = 0; i < 60; i++) {
                     this.particles.push({
                         x: Math.random() * this.canvas.width,
                         y: Math.random() * this.canvas.height,
@@ -147,10 +196,11 @@
                     for (let j = i + 1; j < this.particles.length; j++) {
                         const dx = this.particles[i].x - this.particles[j].x;
                         const dy = this.particles[i].y - this.particles[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < 100) {
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < 100) {
                             this.ctx.beginPath();
-                            this.ctx.strokeStyle = `rgba(0, 242, 255, ${0.1 * (1 - distance/100)})`;
+                            this.ctx.strokeStyle = `rgba(0,242,255,${0.1 * (1 - d/100)})`;
+                            this.ctx.lineWidth = 0.5;
                             this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
                             this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
                             this.ctx.stroke();
@@ -179,37 +229,92 @@
             term.scrollTop = term.scrollHeight;
         }
 
-        window.onload = function() {
-            const randomIndex = Math.floor(Math.random() * keyList.length);
-            const selectedKey = keyList[randomIndex];
-            let i = 0;
-            const keyElement = document.getElementById('keyOutput');
-            keyElement.innerText = '';
+        function setStatus(text, type = 'info') {
+            const box = document.getElementById('statusBox');
+            box.className = 'status-box ' + type;
+            box.style.display = 'block';
+            box.innerHTML = text;
+        }
 
-            setTimeout(() => {
+        function randomKey() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const seg = () => Array.from({length: 5}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+            return `vs18ff-${seg()}-${seg()}`;
+        }
+
+        // Get browser fingerprint (simple)
+        function getFingerprint() {
+            const data = navigator.userAgent + screen.width + screen.height + navigator.language;
+            let hash = 0;
+            for (let i = 0; i < data.length; i++) {
+                hash = ((hash << 5) - hash) + data.charCodeAt(i);
+                hash |= 0;
+            }
+            return 'u' + Math.abs(hash).toString(36);
+        }
+
+        async function generateKeyForUser() {
+            try {
+                setStatus('<span class="spinner"></span> CONNECTING TO SECURE SERVER...', 'info');
+
+                const keyValue = randomKey();
+                const fingerprint = getFingerprint();
+
+                addLog("Generating unique key...");
+                addLog(`Session: ${fingerprint}`);
+
+                // Save to Firebase
+                const keyRef = push(ref(db, 'publicKeys'));
+                await set(keyRef, {
+                    key: keyValue,
+                    fingerprint: fingerprint,
+                    createdAt: Date.now(),
+                    userAgent: navigator.userAgent.substring(0, 100),
+                    status: 'active'
+                });
+
+                addLog("Key saved to database ✅");
+                addLog(`Key: ${keyValue}`);
+
+                setStatus('✅ KEY GENERATED & SAVED SUCCESSFULLY!', 'info');
+
+                // Show key with typing animation
+                const keyEl = document.getElementById('keyOutput');
+                document.getElementById('resultBox').style.display = 'block';
+                document.getElementById('copyBtn').style.display = 'block';
+                keyEl.innerText = '';
+
+                let i = 0;
                 function typeKey() {
-                    if (i < selectedKey.length) {
-                        keyElement.innerText += selectedKey.charAt(i);
+                    if (i < keyValue.length) {
+                        keyEl.innerText += keyValue.charAt(i);
                         i++;
-                        setTimeout(typeKey, 60);
-                    } else {
-                        addLog("ACCESS GRANTED!");
-                        addLog(`Key: ${selectedKey}`);
+                        setTimeout(typeKey, 40);
                     }
                 }
                 typeKey();
-            }, 500);
-        };
 
-        function copyKey(event) {
+            } catch (err) {
+                console.error(err);
+                setStatus('❌ Error: ' + err.message, 'error');
+                addLog("ERROR: " + err.message);
+            }
+        }
+
+        window.copyKey = function(event) {
             const text = document.getElementById('keyOutput').innerText;
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
-                const originalText = btn.innerText;
-                btn.innerText = "✓ COPIED!";
-                setTimeout(() => { btn.innerText = originalText; }, 2000);
+                const original = btn.innerText;
+                btn.innerText = '✓ COPIED TO CLIPBOARD!';
+                setTimeout(() => { btn.innerText = original; }, 2000);
             });
-        }
+        };
+
+        // Auto-generate on page load
+        window.addEventListener('load', () => {
+            setTimeout(generateKeyForUser, 500);
+        });
     </script>
 </body>
 </html>
