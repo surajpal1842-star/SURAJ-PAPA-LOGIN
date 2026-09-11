@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCESS GRANTED | HEX CORE</title>
+    <style>
+        :root { --primary: #00f2ff; --accent: #ff00ff; }
+        * { box-sizing: border-box; }
+        body {
+            background: #050505; margin: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #fff; overflow: hidden;
+        }
+        #particles-canvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: -1;
+        }
+        @keyframes neonGlow {
+            0%, 100% { border-color: var(--primary); box-shadow: 0 0 20px rgba(0,242,255,0.6), inset 0 0 20px rgba(0,242,255,0.2); }
+            50% { border-color: var(--accent); box-shadow: 0 0 30px rgba(255,0,255,0.8), inset 0 0 20px rgba(255,0,255,0.3); }
+        }
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .main-card {
+            width: 95%; max-width: 420px;
+            background: rgba(5,10,20,0.9);
+            border: 3px solid var(--primary);
+            border-radius: 25px; padding: 30px; text-align: center;
+            animation: neonGlow 3s ease-in-out infinite, floatCard 6s ease-in-out infinite;
+            backdrop-filter: blur(15px); z-index: 10;
+        }
+        h2 {
+            font-size: 1.8rem; margin: 5px 0 15px;
+            background: linear-gradient(90deg, #00ff00, var(--primary));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .result-box {
+            background: rgba(0,242,255,0.05);
+            padding: 20px; border-radius: 20px;
+            border: 2px dashed var(--accent); margin: 20px 0;
+        }
+        .key-text {
+            font-size: 1.3rem; color: #00ff00; font-weight: bold;
+            display: block; margin: 10px 0; word-break: break-all;
+            font-family: 'Courier New', monospace;
+            padding: 15px; background: rgba(0,0,0,0.5);
+            border-radius: 10px; border-left: 4px solid #00ff00;
+        }
+        .btn-main {
+            width: 100%; padding: 16px; background: transparent;
+            color: #00ff00; border: 2px solid #00ff00;
+            border-radius: 15px; font-weight: 900;
+            text-transform: uppercase; cursor: pointer;
+            font-size: 15px; transition: all 0.3s; margin-top: 10px;
+        }
+        .btn-main:hover {
+            background: #00ff00; color: #000;
+            box-shadow: 0 0 25px rgba(0,255,0,0.5);
+        }
+        .terminal {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid rgba(0,242,255,0.3);
+            height: 100px; margin: 15px 0; padding: 12px;
+            font-family: 'Courier New', monospace; font-size: 11px;
+            text-align: left; overflow-y: auto; color: #00ff41;
+            border-radius: 15px;
+        }
+        .back-btn {
+            color: #888; font-size: 12px; margin-top: 15px;
+            background: none; border: none; cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="main-card">
+        <div style="background: linear-gradient(90deg, #00f2ff, #ff00ff); color: #000; padding: 8px 24px; border-radius: 50px; display: inline-block; font-size: 14px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px;">
+            ✅ ACCESS GRANTED
+        </div>
+        <h2>YOUR ACCESS KEY</h2>
+
+        <div class="terminal" id="term">
+            [+] Verification complete<br>
+            [+] Decrypting key...
+        </div>
+
+        <div class="result-box">
+            <span style="font-size: 11px; color: #aaa;">DECRYPTED KEY:</span>
+            <span class="key-text" id="keyOutput">...</span>
+        </div>
+
+        <button class="btn-main" onclick="copyKey(event)">📋 COPY KEY</button>
+        <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+    </div>
+
+    <script>
+        // ==========================================
+        // YAHAN APNI KEYS DAALO
+        // ==========================================
+        const keyList = [
+            "vs18ff-168-om0a4", "vs18ff-168-uY0kH", "vs18ff-168-4EX9d",
+            "vs18ff-168-nwKQ0", "vs18ff-168-nyglY", "vs18ff-168-nlqPI",
+            "vs18ff-168-qKGSM", "vs18ff-168-7fScQ", "vs18ff-168-ocqfx",
+            "vs18ff-168-16w8W"
+        ];
+        // ==========================================
+
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particles-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.particleCount = 60;
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                this.initParticles();
+                this.animate();
+            }
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            initParticles() {
+                const colors = ['#00f2ff', '#0088ff', '#ff00ff', '#ffffff'];
+                for (let i = 0; i < this.particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 3 + 1,
+                        speedX: Math.random() * 0.5 - 0.25,
+                        speedY: Math.random() * 0.5 - 0.25,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        opacity: Math.random() * 0.5 + 0.2
+                    });
+                }
+            }
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const dx = this.particles[i].x - this.particles[j].x;
+                        const dy = this.particles[i].y - this.particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 100) {
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = `rgba(0, 242, 255, ${0.1 * (1 - distance/100)})`;
+                            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+                this.particles.forEach(p => {
+                    p.x += p.speedX; p.y += p.speedY;
+                    if (p.x < 0 || p.x > this.canvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > this.canvas.height) p.speedY *= -1;
+                    this.ctx.beginPath();
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.globalAlpha = p.opacity;
+                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.globalAlpha = 1;
+                });
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        new ParticleSystem();
+
+        function addLog(msg) {
+            const term = document.getElementById('term');
+            term.innerHTML += `<br>> ${msg}`;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        window.onload = function() {
+            const randomIndex = Math.floor(Math.random() * keyList.length);
+            const selectedKey = keyList[randomIndex];
+            let i = 0;
+            const keyElement = document.getElementById('keyOutput');
+            keyElement.innerText = '';
+
+            setTimeout(() => {
+                function typeKey() {
+                    if (i < selectedKey.length) {
+                        keyElement.innerText += selectedKey.charAt(i);
+                        i++;
+                        setTimeout(typeKey, 60);
+                    } else {
+                        addLog("ACCESS GRANTED!");
+                        addLog(`Key: ${selectedKey}`);
+                    }
+                }
+                typeKey();
+            }, 500);
+        };
+
+        function copyKey(event) {
+            const text = document.getElementById('keyOutput').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = "✓ COPIED!";
+                setTimeout(() => { btn.innerText = originalText; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
